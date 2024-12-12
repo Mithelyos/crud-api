@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crud-api
+  labels:
+    app: crud-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels: 
+      app: crud-api
+  template: 
+    metadata:
+      labels:
+        app: crud-api
+    spec:
+      containers:
+      - name: crud-api
+        image: docker.io/rakhmen/simple-crud-api
+        ports:
+        - containerPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crud-api-service
+  namespace: default
+spec:
+  type: LoadBalancer
+  selector:
+    app: crud-api
+  ports:
+  - port: 5000
+    protocol: TCP
+    targetPort: 5000
